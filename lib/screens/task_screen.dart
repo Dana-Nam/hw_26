@@ -11,7 +11,13 @@ class TaskScreen extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8),
       child: Column(
-        children: tasks.map((task) => TaskCard(task: task)).toList(),
+        children: tasks
+            .map((task) => TaskCard(
+                  task: task,
+                  onToggle: () {},
+                  onDelete: () {},
+                ))
+            .toList(),
       ),
     );
   }

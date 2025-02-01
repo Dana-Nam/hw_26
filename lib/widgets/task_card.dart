@@ -4,25 +4,40 @@ import '../models/task.dart';
 
 class TaskCard extends StatelessWidget {
   final Task task;
-  const TaskCard({super.key, required this.task});
+  final VoidCallback onToggle;
+  final VoidCallback onDelete;
+
+  const TaskCard({
+    super.key,
+    required this.task,
+    required this.onToggle,
+    required this.onDelete,
+  });
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final bodyLargeStyle = theme.textTheme.bodyLarge!;
+    final TextStyle = bodyLargeStyle.copyWith(
+      decoration: task.isCompleted ? TextDecoration.lineThrough : null,
+      color: task.isCompleted ? theme.disabledColor : null,
+    );
+
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(task.title),
+          Text(task.title, style: TextStyle),
           Row(
             children: [
-              ElevatedButton(
-                onPressed: () {},
-                child: Text('Delete'),
+              Checkbox(
+                value: task.isCompleted,
+                onChanged: (_) => onToggle(),
               ),
-              ElevatedButton(
-                onPressed: () {},
-                child: Text('Done'),
+              IconButton(
+                icon: Icon(Icons.delete, color: theme.colorScheme.error),
+                onPressed: onDelete,
               ),
             ],
           ),

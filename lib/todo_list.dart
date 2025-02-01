@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hw_26/models/task.dart';
 import 'package:hw_26/screens/task_screen.dart';
+import 'package:hw_26/widgets/new_task.dart';
 
 class TodoList extends StatefulWidget {
   const TodoList({super.key});
@@ -16,11 +17,36 @@ class _TodoListState extends State<TodoList> {
     Task(title: "Pay bills"),
   ];
 
+  void addTask(Task newTask) {
+    setState(() {
+      tasks.add(newTask);
+    });
+  }
+
+  void openAddTaskSheet() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (ctx) => Padding(
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(ctx).viewInsets.bottom,
+        ),
+        child: NewTask(onTaskCreated: addTask),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('ToDo List'),
+        actions: [
+          IconButton(
+            onPressed: openAddTaskSheet,
+            icon: Icon(Icons.add),
+          ),
+        ],
       ),
       body: TaskScreen(tasks: tasks),
     );
