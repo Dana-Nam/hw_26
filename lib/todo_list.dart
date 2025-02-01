@@ -17,6 +17,18 @@ class _TodoListState extends State<TodoList> {
     Task(title: "Pay bills"),
   ];
 
+  void toggleTaskCompletion(int index) {
+    setState(() {
+      tasks[index].isCompleted = !tasks[index].isCompleted;
+    });
+  }
+
+  void deleteTask(int index) {
+    setState(() {
+      tasks.removeAt(index);
+    });
+  }
+
   void addTask(Task newTask) {
     setState(() {
       tasks.add(newTask);
@@ -48,7 +60,11 @@ class _TodoListState extends State<TodoList> {
           ),
         ],
       ),
-      body: TaskScreen(tasks: tasks),
+      body: TaskScreen(
+        tasks: tasks,
+        onToggle: toggleTaskCompletion,
+        onDelete: deleteTask,
+      ),
     );
   }
 }

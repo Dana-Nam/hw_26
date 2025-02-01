@@ -18,7 +18,7 @@ class TaskCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final bodyLargeStyle = theme.textTheme.bodyLarge!;
-    final TextStyle = bodyLargeStyle.copyWith(
+    final textStyle = bodyLargeStyle.copyWith(
       decoration: task.isCompleted ? TextDecoration.lineThrough : null,
       color: task.isCompleted ? theme.disabledColor : null,
     );
@@ -28,7 +28,7 @@ class TaskCard extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(task.title, style: TextStyle),
+          Text(task.title, style: textStyle),
           Row(
             children: [
               Checkbox(

@@ -4,7 +4,14 @@ import '../models/task.dart';
 
 class TaskScreen extends StatelessWidget {
   final List<Task> tasks;
-  const TaskScreen({super.key, required this.tasks});
+  final void Function(int index) onToggle;
+  final void Function(int index) onDelete;
+  const TaskScreen({
+    super.key,
+    required this.tasks,
+    required this.onToggle,
+    required this.onDelete,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -14,8 +21,8 @@ class TaskScreen extends StatelessWidget {
         children: tasks
             .map((task) => TaskCard(
                   task: task,
-                  onToggle: () {},
-                  onDelete: () {},
+                  onToggle: () => onToggle(tasks.indexOf(task)),
+                  onDelete: () => onDelete(tasks.indexOf(task)),
                 ))
             .toList(),
       ),
