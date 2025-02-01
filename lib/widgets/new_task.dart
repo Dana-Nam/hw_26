@@ -12,6 +12,7 @@ class NewTask extends StatefulWidget {
 
 class _NewTaskState extends State<NewTask> {
   var title = '';
+  DateTime _deadlineDate = DateTime.now().add(Duration(days: 1));
 
   void onCanceled() {
     Navigator.pop(context);
@@ -19,9 +20,26 @@ class _NewTaskState extends State<NewTask> {
 
   void onSaved() {
     if (title.trim().isEmpty) return;
-    final newTask = Task(title: title.trim());
+    final newTask = Task(
+      title: title.trim(),
+      deadlineDate: _deadlineDate,
+    );
     widget.onTaskCreated(newTask);
     Navigator.pop(context);
+  }
+
+  void _pickDeadlineDate() async {
+    DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: _deadlineDate,
+      firstDate: DateTime.now().add(Duration(days: 1)),
+      lastDate: DateTime(2100),
+    );
+    if (pickedDate != null && pickedDate != _deadlineDate) {
+      setState(() {
+        _deadlineDate = pickedDate;
+      });
+    }
   }
 
   @override
@@ -52,6 +70,16 @@ class _NewTaskState extends State<NewTask> {
                   onPressed: onSaved,
                   child: const Text('Add'),
                 ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          Row(
+            children: [
+              Text('Deadline: ${_deadlineDate.toLocal()}'),
+              IconButton(
+                icon: Icon(Icons.calendar_today),
+                onPressed: _pickDeadlineDate,
               ),
             ],
           ),

@@ -28,12 +28,24 @@ class TaskCard extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(task.title, style: textStyle),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(task.title, style: textStyle),
+              if (task.deadlineDate.isAfter(DateTime.now()))
+                Text('Deadline: ${task.deadlineDate.toLocal()}'),
+              if (task.isCompleted)
+                Text('Completed: ${task.completeDate?.toLocal()}'),
+            ],
+          ),
           Row(
             children: [
               Checkbox(
                 value: task.isCompleted,
-                onChanged: (_) => onToggle(),
+                onChanged: (_) {
+                  task.completeTask();
+                  onToggle();
+                },
               ),
               IconButton(
                 icon: Icon(Icons.delete, color: theme.colorScheme.error),
