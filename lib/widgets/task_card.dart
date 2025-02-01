@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../helpers/format_datetime.dart';
 import '../models/task.dart';
 
 class TaskCard extends StatelessWidget {
@@ -33,9 +34,10 @@ class TaskCard extends StatelessWidget {
             children: [
               Text(task.title, style: textStyle),
               if (task.deadlineDate.isAfter(DateTime.now()))
-                Text('Deadline: ${task.deadlineDate.toLocal()}'),
+                Text('Deadline ${formatDateTime(task.deadlineDate)}'),
               if (task.isCompleted)
-                Text('Completed: ${task.completeDate?.toLocal()}'),
+                Text(
+                    'Completed ${formatDateTime(task.completeDate ?? DateTime.now())}'),
             ],
           ),
           Row(
