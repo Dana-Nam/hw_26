@@ -24,6 +24,20 @@ class TaskCard extends StatelessWidget {
       color: task.isCompleted ? theme.disabledColor : null,
     );
 
+    Color completionDateColor = Colors.black;
+    String completionDateText = '';
+
+    if (task.isCompleted) {
+      final completeDate = task.completeDate ?? DateTime.now();
+      completionDateText = 'Completed ${formatDateTime(completeDate)}';
+
+      if (completeDate.isBefore(task.deadlineDate)) {
+        completionDateColor = Colors.green;
+      } else {
+        completionDateColor = Colors.red;
+      }
+    }
+
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Row(
@@ -37,7 +51,9 @@ class TaskCard extends StatelessWidget {
                 Text('Deadline ${formatDateTime(task.deadlineDate)}'),
               if (task.isCompleted)
                 Text(
-                    'Completed ${formatDateTime(task.completeDate ?? DateTime.now())}'),
+                  completionDateText,
+                  style: TextStyle(color: completionDateColor),
+                ),
             ],
           ),
           Row(
