@@ -11,15 +11,20 @@ class TaskCard extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(task.title),
-          ElevatedButton(
-            onPressed: () {},
-            child: Text('Delete'),
-          ),
-          ElevatedButton(
-            onPressed: () {},
-            child: Text('Done'),
+          Row(
+            children: [
+              ElevatedButton(
+                onPressed: () {},
+                child: Text('Delete'),
+              ),
+              ElevatedButton(
+                onPressed: () {},
+                child: Text('Done'),
+              ),
+            ],
           ),
         ],
       ),
