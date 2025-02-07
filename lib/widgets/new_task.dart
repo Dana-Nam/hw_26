@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../helpers/format_datetime.dart';
 import '../models/task.dart';
 
 class NewTask extends StatefulWidget {
@@ -12,7 +13,18 @@ class NewTask extends StatefulWidget {
 
 class _NewTaskState extends State<NewTask> {
   var title = '';
-  DateTime _deadlineDate = DateTime.now().add(Duration(days: 1));
+  var selectedDate = DateTime.now();
+  var selectedTimeOfDay = TimeOfDay.now();
+
+  final dateController = TextEditingController();
+  final timeController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    dateController.text = formatDate(selectedDate);
+    timeController.text = formatTime(selectedTimeOfDay);
+  }
 
   void onCanceled() {
     Navigator.pop(context);
@@ -20,24 +32,51 @@ class _NewTaskState extends State<NewTask> {
 
   void onSaved() {
     if (title.trim().isEmpty) return;
+    final dateTime = DateTime(
+      selectedDate.year,
+      selectedDate.month,
+      selectedDate.day,
+      selectedTimeOfDay.hour,
+      selectedTimeOfDay.minute,
+    );
     final newTask = Task(
       title: title.trim(),
-      deadlineDate: _deadlineDate,
+      deadlineDate: dateTime,
     );
     widget.onTaskCreated(newTask);
     Navigator.pop(context);
   }
 
-  void _pickDeadlineDate() async {
-    DateTime? pickedDate = await showDatePicker(
+  void onDateTap() async {
+    final now = DateTime.now();
+    final firstDate = DateTime(now.year, now.month, now.day);
+    final lastDate = DateTime(now.year + 1, now.month, now.day);
+
+    final dateFromUser = await showDatePicker(
       context: context,
-      initialDate: _deadlineDate,
-      firstDate: DateTime.now().add(Duration(days: 1)),
-      lastDate: DateTime(2100),
+      firstDate: firstDate,
+      lastDate: lastDate,
+      initialDate: selectedDate,
     );
-    if (pickedDate != null && pickedDate != _deadlineDate) {
+
+    if (dateFromUser != null) {
       setState(() {
-        _deadlineDate = pickedDate;
+        selectedDate = dateFromUser;
+        dateController.text = formatDate(dateFromUser);
+      });
+    }
+  }
+
+  void onTimeTap() async {
+    final pickedTime = await showTimePicker(
+      context: context,
+      initialTime: selectedTimeOfDay,
+    );
+
+    if (pickedTime != null) {
+      setState(() {
+        selectedTimeOfDay = pickedTime;
+        timeController.text = formatTime(pickedTime);
       });
     }
   }
@@ -59,6 +98,29 @@ class _NewTaskState extends State<NewTask> {
           Row(
             children: [
               Expanded(
+                child: TextField(
+                  onTap: onDateTap,
+                  readOnly: true,
+                  controller: dateController,
+                  decoration: InputDecoration(label: Text('Date')),
+                ),
+              ),
+              SizedBox(width: 16),
+              SizedBox(
+                width: 100,
+                child: TextField(
+                  onTap: onTimeTap,
+                  readOnly: true,
+                  controller: timeController,
+                  decoration: InputDecoration(label: Text('Time')),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          Row(
+            children: [
+              Expanded(
                 child: TextButton(
                   onPressed: onCanceled,
                   child: const Text('Cancel'),
@@ -74,15 +136,6 @@ class _NewTaskState extends State<NewTask> {
             ],
           ),
           const SizedBox(height: 16),
-          Row(
-            children: [
-              Text('Deadline: ${_deadlineDate.toLocal()}'),
-              IconButton(
-                icon: Icon(Icons.calendar_today),
-                onPressed: _pickDeadlineDate,
-              ),
-            ],
-          ),
         ],
       ),
     );

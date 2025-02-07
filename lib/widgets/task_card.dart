@@ -61,7 +61,6 @@ class TaskCard extends StatelessWidget {
               Checkbox(
                 value: task.isCompleted,
                 onChanged: (_) {
-                  task.completeTask();
                   onToggle();
                 },
               ),

@@ -25,6 +25,8 @@ class _TodoListState extends State<TodoList> {
   void toggleTaskCompletion(int index) {
     setState(() {
       tasks[index].completeTask();
+      print(
+          "Задача ${tasks[index].title} теперь isCompleted: ${tasks[index].isCompleted}");
     });
   }
 
