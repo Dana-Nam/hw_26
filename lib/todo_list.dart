@@ -59,12 +59,35 @@ class _TodoListState extends State<TodoList> {
     );
   }
 
+  String? selectedCategory;
+
   @override
   Widget build(BuildContext context) {
+    List<Task> filteredTasks = tasks
+        .where((task) =>
+            selectedCategory == null || task.categoryId == selectedCategory)
+        .toList();
+
     return Scaffold(
       appBar: AppBar(
         title: Text('ToDo List'),
         actions: [
+          DropdownButton<String>(
+            value: selectedCategory,
+            hint: Text("Filter by Category"),
+            onChanged: (String? newValue) {
+              setState(() {
+                selectedCategory = newValue;
+              });
+            },
+            items: [
+              DropdownMenuItem(value: null, child: Text("All")),
+              DropdownMenuItem(value: 'meetings', child: Text("Meetings")),
+              DropdownMenuItem(value: 'shopping', child: Text("Shopping")),
+              DropdownMenuItem(value: 'job', child: Text("Job")),
+              DropdownMenuItem(value: 'education', child: Text("Education")),
+            ],
+          ),
           IconButton(
             onPressed: openAddTaskSheet,
             icon: Icon(Icons.add),
@@ -72,7 +95,7 @@ class _TodoListState extends State<TodoList> {
         ],
       ),
       body: TaskScreen(
-        tasks: tasks,
+        tasks: filteredTasks,
         onToggle: toggleTaskCompletion,
         onDelete: deleteTask,
       ),

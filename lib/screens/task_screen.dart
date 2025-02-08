@@ -6,6 +6,7 @@ class TaskScreen extends StatelessWidget {
   final List<Task> tasks;
   final void Function(int index) onToggle;
   final void Function(int index) onDelete;
+
   const TaskScreen({
     super.key,
     required this.tasks,
@@ -15,17 +16,16 @@ class TaskScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return ListView.builder(
       padding: const EdgeInsets.symmetric(horizontal: 8),
-      child: Column(
-        children: tasks
-            .map((task) => TaskCard(
-                  task: task,
-                  onToggle: () => onToggle(tasks.indexOf(task)),
-                  onDelete: () => onDelete(tasks.indexOf(task)),
-                ))
-            .toList(),
-      ),
+      itemCount: tasks.length,
+      itemBuilder: (context, index) {
+        return TaskCard(
+          task: tasks[index],
+          onToggle: () => onToggle(index),
+          onDelete: () => onDelete(index),
+        );
+      },
     );
   }
 }

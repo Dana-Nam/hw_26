@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-
 import '../helpers/format_datetime.dart';
 import '../models/task.dart';
-import '../models/task_category.dart';
 
 class TaskCard extends StatelessWidget {
   final Task task;
