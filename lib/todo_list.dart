@@ -13,13 +13,17 @@ class TodoList extends StatefulWidget {
 class _TodoListState extends State<TodoList> {
   List<Task> tasks = [
     Task(
-        title: "Call Mom", deadlineDate: DateTime.now().add(Duration(days: 1))),
+        title: "Call Mom",
+        deadlineDate: DateTime.now().add(Duration(days: 1)),
+        categoryId: 'meetings'),
     Task(
         title: "Buy groceries",
-        deadlineDate: DateTime.now().add(Duration(days: 2))),
+        deadlineDate: DateTime.now().add(Duration(days: 2)),
+        categoryId: 'shopping'),
     Task(
         title: "Pay bills",
-        deadlineDate: DateTime.now().add(Duration(days: 3))),
+        deadlineDate: DateTime.now().add(Duration(days: 3)),
+        categoryId: 'shopping'),
   ];
 
   void toggleTaskCompletion(int index) {

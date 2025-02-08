@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../helpers/format_datetime.dart';
 import '../models/task.dart';
+import '../models/task_category.dart';
 
 class TaskCard extends StatelessWidget {
   final Task task;
@@ -23,6 +24,8 @@ class TaskCard extends StatelessWidget {
       decoration: task.isCompleted ? TextDecoration.lineThrough : null,
       color: task.isCompleted ? theme.disabledColor : null,
     );
+    final titleSmallStyle = theme.textTheme.titleSmall!;
+    final category = task.category;
 
     Color completionDateColor = Colors.black;
     String completionDateText = '';
@@ -54,6 +57,20 @@ class TaskCard extends StatelessWidget {
                   completionDateText,
                   style: TextStyle(color: completionDateColor),
                 ),
+              Row(
+                children: [
+                  Icon(
+                    category.icon,
+                    size: 16,
+                    color: theme.colorScheme.tertiary,
+                  ),
+                  SizedBox(width: 4),
+                  Text(
+                    category.title,
+                    style: titleSmallStyle,
+                  ),
+                ],
+              ),
             ],
           ),
           Row(

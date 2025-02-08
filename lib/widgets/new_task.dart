@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import '../data/categories_data.dart';
 import '../helpers/format_datetime.dart';
 import '../models/task.dart';
+import '../models/task_category.dart';
 
 class NewTask extends StatefulWidget {
   final void Function(Task newTask) onTaskCreated;
@@ -15,6 +17,7 @@ class _NewTaskState extends State<NewTask> {
   var title = '';
   var selectedDate = DateTime.now();
   var selectedTimeOfDay = TimeOfDay.now();
+  String? selectedCategory;
 
   final dateController = TextEditingController();
   final timeController = TextEditingController();
@@ -32,6 +35,9 @@ class _NewTaskState extends State<NewTask> {
 
   void onSaved() {
     if (title.trim().isEmpty) return;
+    if (selectedCategory == null) {
+      return;
+    }
     final dateTime = DateTime(
       selectedDate.year,
       selectedDate.month,
@@ -42,6 +48,7 @@ class _NewTaskState extends State<NewTask> {
     final newTask = Task(
       title: title.trim(),
       deadlineDate: dateTime,
+      categoryId: selectedCategory!,
     );
     widget.onTaskCreated(newTask);
     Navigator.pop(context);
@@ -83,6 +90,9 @@ class _NewTaskState extends State<NewTask> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final bottomInset = MediaQuery.of(context).viewInsets.bottom;
+
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(
@@ -117,6 +127,21 @@ class _NewTaskState extends State<NewTask> {
               ),
             ],
           ),
+          SizedBox(height: 16),
+          DropdownMenu(
+              expandedInsets: EdgeInsets.zero,
+              label: Text('Category'),
+              inputDecorationTheme: theme.inputDecorationTheme,
+              onSelected: (value) => setState(() => selectedCategory = value),
+              dropdownMenuEntries: categories
+                  .map(
+                    (category) => DropdownMenuEntry(
+                      value: category.id,
+                      leadingIcon: Icon(category.icon),
+                      label: category.title,
+                    ),
+                  )
+                  .toList()),
           const SizedBox(height: 16),
           Row(
             children: [
