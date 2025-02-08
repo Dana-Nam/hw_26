@@ -24,6 +24,14 @@ class _TodoListState extends State<TodoList> {
         title: "Pay bills",
         deadlineDate: DateTime.now().add(Duration(days: 3)),
         categoryId: 'shopping'),
+    Task(
+        title: "Send mail",
+        deadlineDate: DateTime.now().add(Duration(days: 3)),
+        categoryId: 'job'),
+    Task(
+        title: "Lecture Monday 11AM",
+        deadlineDate: DateTime.now().add(Duration(days: 3)),
+        categoryId: 'education'),
   ];
 
   void toggleTaskCompletion(int index) {
