@@ -6,7 +6,7 @@ class TaskScreen extends StatelessWidget {
   final List<Task> tasks;
   final void Function(int index) onToggle;
   final void Function(int index) onDelete;
-  final void Function(String index) onTaskEdited;
+  final void Function(String id) onTaskEdited;
 
   const TaskScreen({
     super.key,
@@ -22,24 +22,35 @@ class TaskScreen extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 8),
       itemCount: tasks.length,
       itemBuilder: (context, index) {
+        final task = tasks[index];
+
         return Dismissible(
-          key: ValueKey(tasks[index].id),
-          direction: DismissDirection.endToStart,
+          key: ValueKey(task.id),
           background: Container(
+            color: Colors.blue,
+            alignment: Alignment.centerLeft,
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: const Icon(Icons.edit, color: Colors.white),
+          ),
+          secondaryBackground: Container(
             color: Colors.red,
             alignment: Alignment.centerRight,
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: const Icon(Icons.delete, color: Colors.white),
           ),
-          onDismissed: (direction) {
-            onDelete(index);
+          confirmDismiss: (direction) async {
+            if (direction == DismissDirection.startToEnd) {
+              onTaskEdited(task.id);
+              return false;
+            } else if (direction == DismissDirection.endToStart) {
+              onDelete(index);
+              return true;
+            }
+            return false;
           },
-          child: GestureDetector(
-            onTap: () => onTaskEdited(tasks[index].id.toString()),
-            child: TaskCard(
-              task: tasks[index],
-              onToggle: () => onToggle(index),
-            ),
+          child: TaskCard(
+            task: task,
+            onToggle: () => onToggle(index),
           ),
         );
       },
