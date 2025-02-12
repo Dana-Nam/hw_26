@@ -6,12 +6,14 @@ class TaskScreen extends StatelessWidget {
   final List<Task> tasks;
   final void Function(int index) onToggle;
   final void Function(int index) onDelete;
+  final void Function(String index) onTaskEdited;
 
   const TaskScreen({
     super.key,
     required this.tasks,
     required this.onToggle,
     required this.onDelete,
+    required this.onTaskEdited,
   });
 
   @override
@@ -32,9 +34,12 @@ class TaskScreen extends StatelessWidget {
           onDismissed: (direction) {
             onDelete(index);
           },
-          child: TaskCard(
-            task: tasks[index],
-            onToggle: () => onToggle(index),
+          child: GestureDetector(
+            onTap: () => onTaskEdited(tasks[index].id.toString()),
+            child: TaskCard(
+              task: tasks[index],
+              onToggle: () => onToggle(index),
+            ),
           ),
         );
       },

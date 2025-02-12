@@ -13,14 +13,13 @@ class Task {
   final String categoryId;
 
   Task({
+    String? id,
     required this.title,
     required this.deadlineDate,
     this.isCompleted = false,
     this.completeDate,
     required this.categoryId,
-  }) {
-    id = uuid.v4();
-  }
+  }) : id = id ?? uuid.v4();
 
   void completeTask() {
     isCompleted = !isCompleted;

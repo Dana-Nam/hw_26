@@ -6,25 +6,37 @@ import '../models/task_category.dart';
 
 class NewTask extends StatefulWidget {
   final void Function(Task newTask) onTaskCreated;
+  final Task? existingTask;
 
-  const NewTask({super.key, required this.onTaskCreated});
+  const NewTask({
+    super.key,
+    required this.onTaskCreated,
+    this.existingTask,
+  });
 
   @override
   State<NewTask> createState() => _NewTaskState();
 }
 
 class _NewTaskState extends State<NewTask> {
-  var title = '';
   var selectedDate = DateTime.now();
   var selectedTimeOfDay = TimeOfDay.now();
   String? selectedCategory;
 
   final dateController = TextEditingController();
   final timeController = TextEditingController();
+  final tittleController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
+    if (widget.existingTask != null) {
+      final existingTask = widget.existingTask!;
+      tittleController.text = existingTask.title;
+      selectedDate = existingTask.deadlineDate;
+      selectedTimeOfDay = TimeOfDay.fromDateTime(selectedDate);
+      selectedCategory = existingTask.categoryId;
+    }
     dateController.text = formatDate(selectedDate);
     timeController.text = formatTime(selectedTimeOfDay);
   }
@@ -34,7 +46,7 @@ class _NewTaskState extends State<NewTask> {
   }
 
   void onSaved() {
-    if (title.trim().isEmpty) return;
+    if (tittleController.text.trim().isEmpty) return;
     if (selectedCategory == null) {
       return;
     }
@@ -46,7 +58,8 @@ class _NewTaskState extends State<NewTask> {
       selectedTimeOfDay.minute,
     );
     final newTask = Task(
-      title: title.trim(),
+      id: widget.existingTask?.id,
+      title: tittleController.text.trim(),
       deadlineDate: dateTime,
       categoryId: selectedCategory!,
     );
@@ -99,7 +112,7 @@ class _NewTaskState extends State<NewTask> {
         mainAxisSize: MainAxisSize.min,
         children: [
           TextField(
-            onChanged: (value) => setState(() => title = value),
+            controller: tittleController,
             decoration: const InputDecoration(
               labelText: 'Title',
             ),
@@ -132,6 +145,7 @@ class _NewTaskState extends State<NewTask> {
               expandedInsets: EdgeInsets.zero,
               label: Text('Category'),
               inputDecorationTheme: theme.inputDecorationTheme,
+              initialSelection: selectedCategory,
               onSelected: (value) => setState(() => selectedCategory = value),
               dropdownMenuEntries: categories
                   .map(

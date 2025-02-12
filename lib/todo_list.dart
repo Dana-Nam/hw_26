@@ -54,6 +54,13 @@ class _TodoListState extends State<TodoList> {
     });
   }
 
+  void editTask(Task editedTask) {
+    setState(() {
+      final index = tasks.indexWhere((task) => task.id == editedTask.id);
+      tasks[index] = editedTask;
+    });
+  }
+
   void openAddTaskSheet() {
     showModalBottomSheet(
       context: context,
@@ -63,6 +70,23 @@ class _TodoListState extends State<TodoList> {
           bottom: MediaQuery.of(ctx).viewInsets.bottom,
         ),
         child: NewTask(onTaskCreated: addTask),
+      ),
+    );
+  }
+
+  void openEditTransactionSheet(String id) {
+    final existingTask = tasks.firstWhere((task) => task.id == id);
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (ctx) => Padding(
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(ctx).viewInsets.bottom,
+        ),
+        child: NewTask(
+          onTaskCreated: editTask,
+          existingTask: existingTask,
+        ),
       ),
     );
   }
@@ -106,6 +130,7 @@ class _TodoListState extends State<TodoList> {
         tasks: filteredTasks,
         onToggle: toggleTaskCompletion,
         onDelete: deleteTask,
+        onTaskEdited: openEditTransactionSheet,
       ),
     );
   }
