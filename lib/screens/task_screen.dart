@@ -20,10 +20,22 @@ class TaskScreen extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 8),
       itemCount: tasks.length,
       itemBuilder: (context, index) {
-        return TaskCard(
-          task: tasks[index],
-          onToggle: () => onToggle(index),
-          onDelete: () => onDelete(index),
+        return Dismissible(
+          key: ValueKey(tasks[index].id),
+          direction: DismissDirection.endToStart,
+          background: Container(
+            color: Colors.red,
+            alignment: Alignment.centerRight,
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: const Icon(Icons.delete, color: Colors.white),
+          ),
+          onDismissed: (direction) {
+            onDelete(index);
+          },
+          child: TaskCard(
+            task: tasks[index],
+            onToggle: () => onToggle(index),
+          ),
         );
       },
     );

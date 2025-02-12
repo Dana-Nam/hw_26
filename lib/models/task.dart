@@ -1,6 +1,11 @@
+import 'package:uuid/uuid.dart';
+
 import '../data/categories_data.dart';
 
+const uuid = Uuid();
+
 class Task {
+  late final String id;
   String title;
   bool isCompleted;
   DateTime? completeDate;
@@ -13,7 +18,9 @@ class Task {
     this.isCompleted = false,
     this.completeDate,
     required this.categoryId,
-  });
+  }) {
+    id = uuid.v4();
+  }
 
   void completeTask() {
     isCompleted = !isCompleted;

@@ -5,13 +5,11 @@ import '../models/task.dart';
 class TaskCard extends StatelessWidget {
   final Task task;
   final VoidCallback onToggle;
-  final VoidCallback onDelete;
 
   const TaskCard({
     super.key,
     required this.task,
     required this.onToggle,
-    required this.onDelete,
   });
 
   @override
@@ -78,10 +76,6 @@ class TaskCard extends StatelessWidget {
                 onChanged: (_) {
                   onToggle();
                 },
-              ),
-              IconButton(
-                icon: Icon(Icons.delete, color: theme.colorScheme.error),
-                onPressed: onDelete,
               ),
             ],
           ),
