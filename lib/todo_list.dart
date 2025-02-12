@@ -21,7 +21,7 @@ class _TodoListState extends State<TodoList> {
         deadlineDate: DateTime.now().add(Duration(days: 2)),
         categoryId: 'shopping'),
     Task(
-        title: "Pay bills",
+        title: "A Pay bills",
         deadlineDate: DateTime.now().add(Duration(days: 3)),
         categoryId: 'shopping'),
     Task(

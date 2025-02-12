@@ -18,11 +18,14 @@ class TaskScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final sortedTasks = List<Task>.from(tasks)
+      ..sort((a, b) => a.title.toLowerCase().compareTo(b.title.toLowerCase()));
+
     return ListView.builder(
       padding: const EdgeInsets.symmetric(horizontal: 8),
-      itemCount: tasks.length,
+      itemCount: sortedTasks.length,
       itemBuilder: (context, index) {
-        final task = tasks[index];
+        final task = sortedTasks[index];
 
         return Dismissible(
           key: ValueKey(task.id),
@@ -43,14 +46,14 @@ class TaskScreen extends StatelessWidget {
               onTaskEdited(task.id);
               return false;
             } else if (direction == DismissDirection.endToStart) {
-              onDelete(index);
+              onDelete(tasks.indexOf(task));
               return true;
             }
             return false;
           },
           child: TaskCard(
             task: task,
-            onToggle: () => onToggle(index),
+            onToggle: () => onToggle(tasks.indexOf(task)),
           ),
         );
       },
